@@ -4,6 +4,7 @@ var app = {
   server: "https://api.parse.com/1/classes/chatterbox",
   username: "anonymous",
   roomname: "room",
+  lastMessageId: 0,
   friends: {},
 
   init: function(){
@@ -15,8 +16,11 @@ var app = {
     app.$roomSelect = $("#roomSelect");
     app.$send = $(".send");
 
-   
+    app.$main.on("click", '.username', app.addFriend)
     app.$send.on("submit", app.handleSubmit)
+    app.$roomSelect.on('change', app.saveRoom)
+
+
     setTimeout(app.fetch, 1000);
   }
 };
@@ -31,6 +35,9 @@ app.send = function(message){
       console.log('chatterbox: Message sent');
       console.log(data)
       app.fetch();
+    },
+    error: function(data){
+      console.error('chatterbox: Failed to send message');
     }
 	})
 }
@@ -48,6 +55,20 @@ app.fetch = function(){
       console.log('retrieved');
       console.log(data);
 
+      if(!data.results || !data.results.length){ return;}
+
+      var recentMessages = data.results[data.results.length-1];
+
+      var displayedRoom = $('.chat span').first().data('roomname')
+
+      if (mostRecentMessage.objectId !== app.lastMessageId ||
+        app.roomname !== displayedRoom){
+        app.populateRooms(data.results);
+
+      app.populateMessages(data.results);
+
+      app.lastMessageId = mostRecentMessage.objectId;
+      }
       _.each(data.results, function(obj){
           app.addMessage(obj);
       })
