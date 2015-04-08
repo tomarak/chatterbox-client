@@ -12,21 +12,33 @@
     <script src="env/config.js"></script>
     <script src="scripts/app.js"></script>
 
+    <script>
+    $(function(){
+      app.init();
+    })
+    </script>
+
   </head>
   <body>
     <div id="main">
       <h1>chatterbox</h1>
-      <form>
-        <input type="text" class="writemsg">
-        <button type="submit" class="btn">Send</button>
+
+      <form action="#" id="send" method="post">
+        <input type="text" name="message" id ="message">
+        <input type="submit" name="submit" class="submit"/>
       </form>
+
 
       <div id="chats">
 
       </div>
+  
 
       <div id="roomSelect">
-
+        <form id="addRoom">
+         <input type="text" class="room">
+         <button class="btn">Add Room</button>
+        </form>
       </div>
 
     </div>
