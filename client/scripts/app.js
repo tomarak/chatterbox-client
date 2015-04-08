@@ -15,13 +15,11 @@ var app = {
     app.$roomSelect = $("#roomSelect");
     app.$send = $(".send");
 
-    app.$main.on("click", ".username", app.addFriend);
+   
     app.$send.on("submit", app.handleSubmit)
     setTimeout(app.fetch, 1000);
   }
 };
-
-
 
 app.send = function(message){
 	$.ajax({
@@ -73,26 +71,21 @@ app.addRoom = function(roomName){
   $("#roomSelect").append('<span class="room">'+ roomName + '</span>');
 }
 
-app.addFriend = function(){
-  
+app.addFriend = function(evt){
+  var username = $(evt.currentTarget).attr('data-username');
+  console.log(username);
 }
 
 app.handleSubmit = function(msg){
 
   var message = {
-    "username": user.username + "",
-    "text": msg,
+    "username": app.username
+    "text": app.$message.val(),
+    "roomname": app.roomname || "room"
   }
 
   app.send(message);
 }
-
-$("form").submit(function(){
-  user.message = $("input.writemsg").val();
-  app.handleSubmit(user.message)
-
-
-})
 
 $("form#addRoom").click(function(event){
   var roomName = $('input.room').val();
